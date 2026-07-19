@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%=title%>
+    </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h2 class="mb-4">Product Details</h2>
+
+        <table class="table table-bordered">
+
+            <tr>
+                <th>Name</th>
+                <td>
+                    <%= product.name %>
+                </td>
+            </tr>
+
+            <tr>
+                <th>Description</th>
+                <td>
+                    <%= product.description %>
+                </td>
+            </tr>
+
+            <tr>
+                <th>Short Description</th>
+                <td>
+                    <%= product.shortDescription %>
+                </td>
+            </tr>
+
+            <tr>
+                <th>Brand</th>
+                <td>
+                    <%= product.brand %>
+                </td>
+            </tr>
+
+            <tr>
+                <th>Category</th>
+                <td>
+                    <%= product.category %>
+                </td>
+            </tr>
+
+            <tr>
+                <th>Price</th>
+                <td>
+                    <%= product.price %>
+                </td>
+            </tr>
+
+            <tr>
+                <th>Discount</th>
+                <td>
+                    <%= product.discountPrice %>
+                </td>
+            </tr>
+
+            <tr>
+                <th>Currency</th>
+                <td>
+                    <%= product.currency %>
+                </td>
+            </tr>
+
+            <tr>
+                <th>Tag</th>
+                <td>
+                    <%= product.tag %>
+                </td>
+            </tr>
+
+            <tr>
+                <th>Status</th>
+                <td>
+                    <%= product.status %>
+                </td>
+            </tr>
+
+            <tr>
+                <th>Deleted?</th>
+                <td>
+                    <%= product.isDeleted %>
+                </td>
+            </tr>
+
+        </table>
+
+        <a href="/product" class="btn btn-primary">
+            Back
+        </a>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

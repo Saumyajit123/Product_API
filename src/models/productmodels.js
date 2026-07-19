@@ -21,6 +21,7 @@ const productSchema = new Schema(
     brand: {
       type: String,
       required: [true, "Brand is required"],
+      unique: true,
       trim: true,
     },
     category: {
@@ -31,11 +32,13 @@ const productSchema = new Schema(
     price: {
       type: Number,
       required: [true, "Price is required"],
+      unique: true,
       trim: true,
     },
     discountPrice: {
       type: Number,
       required: [true, "Discount Price is required"],
+      unique: true,
       trim: true,
     },
     currency: {
@@ -64,7 +67,7 @@ const productSchema = new Schema(
     },
     status: {
         type: String,
-        enum: ["active", "inactive", "archived"],
+        enum: ["Active", "Inactive", "Archieved"],
         required: [true, "Status is required"],
         trim: true,
     },
@@ -87,6 +90,10 @@ const productSchema = new Schema(
     //     },
     //   },
     // ],
+    image: {
+      type: String,
+      default: "product.jpg"
+    },
   },
   {
     timestamps: true,

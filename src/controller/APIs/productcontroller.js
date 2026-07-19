@@ -1,5 +1,7 @@
 const Product = require("../../models/productmodels");
 const statuscode = require("../../utils/statuscode");
+const fs = require("fs");
+const path = require("path");
 
 class ProductController {
   // CREATE:
@@ -18,6 +20,10 @@ class ProductController {
         status,
         isDeleted,
       } = req.body;
+
+      const existingProduct = await Product.findOne({
+        $or: [{brand: brand}, {price: price}, {discountPrice: discountPrice}]
+      });
 
       // ALL FIELDS REQUIRED CONDITION:
       if (
@@ -40,27 +46,33 @@ class ProductController {
       }
 
       // FOR EXISTING DATA CONDITION:
-      const existingProduct = await Product.findOne({ name: name });
       if (existingProduct) {
+        if(req.file) {
+          const imagePath = path.resolve(req.file.path);
+          if(fs.existsSync(imagePath)) {
+            fs.unlinkSync(imagePath);
+          }
+        }
         return res.status(statuscode.CONFLICT).json({
           status: false,
-          message: "Product with this name already exists",
+          message: "Product already exists",
         });
       }
 
       // CREATE NEW PRODUCT:
       const newProduct = new Product({
-        name,
-        description,
-        shortDescription,
-        brand,
-        category,
-        price,
-        discountPrice,
-        currency,
-        tag,
-        status,
-        isDeleted,
+        name: name,
+        description: description,
+        shortDescription: shortDescription,
+        brand: brand,
+        category: category,
+        price: price,
+        discountPrice: discountPrice,
+        currency: currency,
+        tag: tag,
+        status: status,
+        isDeleted: isDeleted,
+        image: req.file ? req.file.filename : "",
       });
 
       const data = await newProduct.save();
@@ -156,8 +168,44 @@ class ProductController {
         status,
         isDeleted,
       } = req.body;
+      
+      const productData = await Product.findById(id);
+      
+      if (!productData) {
+        return res.status(statuscode.NOT_FOUND).json({
+          status: false,
+          message: "No product found",
+          data: null,
+        });
+      }
 
-      const productData = await Product.findByIdAndUpdate(
+      // Keep the bt default image
+      let image = productData.image;
+
+      // If a new product is uploaded:
+      if(req.file) {
+        
+        // Delete the old image:
+        if(productData.image) {
+          const oldImagePath = path.join(
+            __dirname,
+            "../../../uploads",
+            productData.image
+          );
+
+          if(fs.existsSync(oldImagePath)) {
+            fs.unlinkSync(oldImagePath);
+            console.log("Old image is deleted");
+          } else {
+            console.log("File not found:", oldImagePath);
+          }
+        }
+
+        // Save the new image name:
+        image = req.file.filename;
+      }
+
+      const updatedProduct = await Product.findByIdAndUpdate(
         id,
         {
           name,
@@ -171,17 +219,11 @@ class ProductController {
           tag,
           status,
           isDeleted,
+          image
         },
         { new: true },
       );
 
-      if (!productData) {
-        return res.status(statuscode.NOT_FOUND).json({
-          status: false,
-          message: "No product found",
-          data: null,
-        });
-      }
 
       return res.status(statuscode.OK).json({
         status: true,
